@@ -16,16 +16,28 @@ class ApplicationController < Sinatra::Base
     erb :signup
   end
 
-  post "/signup" do
-    @user = User.new(username: params[:username], password: params[:password])
+  # post "/signup" do
+  #   @user = User.new(username: params[:username], password: params[:password])
 
-    if @user.save
-      redirect "/login"
+  #   if @user.save
+  #     redirect "/login"
+  #   elsif params[:username] == "", params[:password] == ""
+  #     redirect "/failure"
+  #   else
+  #     redirect "/failure"
+  #   end
+  # end
+
+  post "/signup" do
+    if params[:username] == "" || params[:password] == ""
+      redirect '/failure'
     else
-      redirect "/failure"
+      User.create(username: params[:username], password: params[:password])
+      redirect '/login'
     end
 
   end
+
 
   get "/account" do
     @user = User.find(session[:user_id])
